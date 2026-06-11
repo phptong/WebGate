@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>WebGate</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 10px;
+      width: 380px;
+      background: #f7f7f7;
+    }
+
+    h3 {
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    .status {
+      font-size: 11px;
+      color: #555;
+      margin-bottom: 10px;
+    }
+
+    .tabs {
+      display: flex;
+      margin-bottom: 10px;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 8px;
+      text-align: center;
+      cursor: pointer;
+      background: #ddd;
+      border: 1px solid #ccc;
+      font-size: 12px;
+    }
+
+    .tab.active {
+      background: white;
+      font-weight: bold;
+    }
+
+    .section {
+      display: none;
+      background: white;
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    label {
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      box-sizing: border-box;
+      margin-top: 5px;
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+
+    textarea {
+      height: 70px;
+      font-family: monospace;
+    }
+
+    textarea.small {
+      height: 52px;
+    }
+
+    button {
+      width: 100%;
+      padding: 8px;
+      margin-top: 8px;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.65;
+    }
+
+    pre {
+      background: #111;
+      color: #0f0;
+      padding: 8px;
+      font-size: 11px;
+      height: 150px;
+      overflow: auto;
+      white-space: pre-wrap;
+    }
+
+    .hint {
+      font-size: 11px;
+      color: #666;
+      margin-top: -4px;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h3>WebGate</h3>
+  <div class="status">Extension-first. Web-ready structure. Core features currently run in Chrome Extension.</div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="url">URL/API</div>
+    <div class="tab" data-tab="local">Local WebLLM</div>
+  </div>
+
+  <div id="url" class="section active">
+    <label for="preset">Preset</label>
+    <select id="preset">
+      <option value="">Custom</option>
+      <option value="openai">OpenAI</option>
+      <option value="ollama">Ollama</option>
+    </select>
+
+    <label for="method">Method</label>
+    <select id="method">
+      <option>POST</option>
+      <option>GET</option>
+    </select>
+
+    <label for="urlField">URL</label>
+    <input id="urlField" placeholder="https://api..." />
+
+    <label for="tokenField">Token</label>
+    <input id="tokenField" placeholder="Bearer token, optional" />
+    <div class="hint">Use only the raw token value. The preset adds Bearer automatically.</div>
+
+    <label for="headersField">Headers JSON</label>
+    <textarea id="headersField" class="small">{}</textarea>
+
+    <label for="templateField">Body Template JSON</label>
+    <textarea id="templateField">{
+  "prompt": "{{prompt}}"
+}</textarea>
+
+    <label for="urlPrompt">Prompt</label>
+    <textarea id="urlPrompt"></textarea>
+
+    <label for="responsePath">Response Path</label>
+    <input id="responsePath" placeholder="choices[0].message.content" />
+  </div>
+
+  <div id="local" class="section">
+    <label for="localPrompt">Prompt</label>
+    <textarea id="localPrompt"></textarea>
+
+    <label for="modelSelect">Model</label>
+    <select id="modelSelect"></select>
+    <div class="hint">Local WebLLM currently runs only in the extension background service worker.</div>
+  </div>
+
+  <button id="runBtn">Send Request</button>
+
+  <h4>Response</h4>
+  <pre id="output">Ready.</pre>
+
+  <script type="module" src="./popup.js"></script>
+</body>
+</html>
