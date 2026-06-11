@@ -175,10 +175,11 @@ In the Web page, keep Server URL as:
 ```txt
 /prompt
 ```
+This avoids cross-port localhost fetch/CORS/private-network issues.
 
 ## Acknowledgement
 
 WebGate builds on the original codebase by Brian Rüegg: https://github.com/brapls/cloud-llm-local. We thank Brian for making the original implementation available.
 
 
-This avoids cross-port localhost fetch/CORS/private-network issues.
+
