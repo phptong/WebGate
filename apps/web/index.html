@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WebGate Web</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 960px;
+      margin: 32px auto;
+      padding: 0 16px;
+      background: #f7f7f7;
+      color: #222;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .tab {
+      border: 1px solid #ccc;
+      background: #eee;
+      padding: 10px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .tab.active {
+      background: #fff;
+      font-weight: bold;
+      border-bottom-color: #fff;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    input,
+    textarea,
+    select,
+    button {
+      width: 100%;
+      box-sizing: border-box;
+      margin-top: 6px;
+      padding: 8px;
+      font-size: 14px;
+    }
+
+    textarea {
+      min-height: 100px;
+      font-family: monospace;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.65;
+    }
+
+    pre {
+      background: #111;
+      color: #0f0;
+      padding: 12px;
+      min-height: 140px;
+      max-height: 360px;
+      overflow: auto;
+      white-space: pre-wrap;
+      border-radius: 8px;
+    }
+
+    .notice {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .warning {
+      color: #8a5a00;
+      background: #fff7e6;
+      border: 1px solid #ffd591;
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 10px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 720px) {
+      .row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>WebGate</h1>
+  <p class="notice">
+    Web-ready mode. Chrome Extension remains the primary complete product entry; this page now supports browser-side WebLLM as an MVP.
+  </p>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="server">Server / Ollama</button>
+    <button class="tab" data-tab="local">Browser WebLLM</button>
+  </div>
+
+  <div id="server" class="section active card">
+    <h2>Server / Ollama</h2>
+    <p class="notice">
+      Calls the local WebGate Flask server on the same origin, which then calls Ollama. Start the server first with <code>cd server && python main.py</code>, then open <code>http://127.0.0.1:5000/apps/web/index.html</code>.
+    </p>
+
+    <label for="serverUrl">Server URL</label>
+    <input id="serverUrl" value="/prompt" />
+
+    <label for="serverPrompt">Prompt</label>
+    <textarea id="serverPrompt">Hello from the web shell.</textarea>
+
+    <label for="serverModel">Ollama Model</label>
+    <input id="serverModel" value="phi3:mini-4k" />
+
+    <button id="runServerBtn">Run via Flask/Ollama</button>
+  </div>
+
+  <div id="local" class="section card">
+    <h2>Browser WebLLM</h2>
+    <p class="notice">
+      Runs the model directly in the browser using WebGPU. First load can be slow because model files need to download and cache locally.
+    </p>
+
+    <div id="webgpuWarning" class="warning" hidden>
+      WebGPU is not available. Use a recent Chrome/Edge browser and open this page from <code>http://localhost</code> or HTTPS.
+    </div>
+
+    <div class="row">
+      <div>
+        <label for="localModel">WebLLM Model</label>
+        <select id="localModel"></select>
+      </div>
+      <div>
+        <label for="localStatus">Status</label>
+        <input id="localStatus" value="Not loaded" readonly />
+      </div>
+    </div>
+
+    <label for="localPrompt">Prompt</label>
+    <textarea id="localPrompt">Explain WebLLM in one paragraph.</textarea>
+
+    <button id="loadLocalBtn">Load Selected Model</button>
+    <button id="runLocalBtn">Run in Browser with WebLLM</button>
+  </div>
+
+  <div class="card">
+    <h2>Response</h2>
+    <pre id="output">Ready.</pre>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
